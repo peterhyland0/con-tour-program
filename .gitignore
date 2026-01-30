@@ -3,3 +3,5 @@ package-lock.json
 *.pdf
 check_pages.js
 verify_pdf_pages.js
+inspect_pages.js
+take_screenshots.js
