@@ -6,17 +6,28 @@ const { pathToFileURL } = require("url");
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  // Point this to your HTML filename
   const htmlPath = path.resolve(__dirname, "index.html");
   const fileUrl = pathToFileURL(htmlPath).href;
 
-  await page.goto(fileUrl, { waitUntil: "load" });
+  await page.goto(fileUrl, { waitUntil: "networkidle" });
+
+  // ✅ ensure fonts are ready (Google Fonts)
+  await page.evaluate(() => document.fonts.ready);
+
+  // ✅ force @media print rules to apply
+  await page.emulateMedia({ media: "print" });
 
   await page.pdf({
     path: "tour-program.pdf",
-    format: "A4",
     printBackground: true,
-    margin: { top: "0", right: "0", bottom: "0", left: "0" }
+
+    // ✅ let CSS @page size win (210mm x 297mm)
+    preferCSSPageSize: true,
+
+    // Optional: if you keep format, it can override CSS in some cases
+    // format: "A4",
+
+    margin: { top: 0, right: 0, bottom: 0, left: 0 }
   });
 
   await browser.close();

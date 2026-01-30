@@ -1,0 +1,27 @@
+{
+  "name": "con-tour-program",
+  "version": "1.0.0",
+  "main": "export-pdf.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "playwright": "^1.58.1"
+  },
+  "dependencies": {
+    "playwright-core": "^1.58.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterhyland0/con-tour-program.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/peterhyland0/con-tour-program/issues"
+  },
+  "homepage": "https://github.com/peterhyland0/con-tour-program#readme"
+}

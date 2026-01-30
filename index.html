@@ -12,33 +12,53 @@
 
   <style>
     /* ===== PRINT / PDF EXPORT ===== */
-@page{
-  size: 210mm 297mm;   /* A4 */
-  margin: 0;
-}
+    @page{
+      size: 210mm 297mm;   /* A4 */
+      margin: 0;
+    }
 
-@media print{
-  body{ background: #fff; }
+    @media print{
+      /* Remove browser default print margins and screen background */
+      html, body{
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+      }
 
-  .wrap{ margin:0; padding:0; max-width:none; }
-  .grid{ display:block; }            /* single column */
-  .page{
-    width: 210mm;
-    height: 297mm;
-    max-width: none;
-    box-shadow: none;
-    margin: 0;
-    page-break-after: always;
-    break-after: page;
-  }
-  .page:last-child{
-    page-break-after: auto;
-    break-after: auto;
-  }
+      /* Ensure the wrapper/grid doesn't affect print layout */
+      .wrap{ margin:0 !important; padding:0 !important; max-width:none !important; }
+      .grid{ display:block !important; }
 
-  /* optional: avoid cropping due to aspect-ratio in print */
-  .page{ aspect-ratio: auto; }
-}
+      /* Each .page becomes a full A4 page */
+      .page{
+        width: 210mm !important;
+        height: 297mm !important;
+        max-width: none !important;
+        aspect-ratio: auto !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page:last-child{
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      /* Keep colors/gradients in print/PDF */
+      *{
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      /* Avoid magenta/pink shifts in Chromium PDF rendering:
+         disable blend-mode behavior in print */
+      .page--sponsor::before,
+      .page--sponsor::after{
+        mix-blend-mode: normal !important;
+      }
+    }
 
     :root{
       --blue:#1E5BFF;
@@ -56,7 +76,7 @@
       --inter: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family: var(--inter);
@@ -98,8 +118,14 @@
       isolation:isolate;
     }
 
-    /* subtle “paper” edge */
-    .page::before{
+    /* IMPORTANT:
+       Remove global overlays (these cause pink/magenta in PDF due to blend modes).
+       Sponsor-only overlays are added below. */
+    .page::before{ content:none; }
+    .page::after{ content:none; }
+
+    /* Sponsor-only “refined fade” overlay */
+    .page--sponsor::before{
       content:"";
       position:absolute; inset:0;
       background:
@@ -107,19 +133,19 @@
         radial-gradient(900px 500px at 110% -10%, rgba(255,255,255,.06), transparent 50%);
       pointer-events:none;
       z-index: 2;
-      mix-blend-mode: screen;
+      /* No blend-mode to avoid PDF color shift */
       opacity:.6;
     }
 
-    /* grain overlay */
-    .page::after{
+    /* Sponsor-only grain overlay */
+    .page--sponsor::after{
       content:"";
       position:absolute; inset:0;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-      mix-blend-mode: overlay;
-      opacity:.12;
       pointer-events:none;
       z-index: 3;
+      /* No blend-mode to avoid PDF color shift */
+      opacity:.12;
     }
 
     .page__inner{
@@ -214,6 +240,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center top;
+      display:block;
     }
     .cover__bg::after{
       content: "";
@@ -271,17 +298,6 @@
       align-items:flex-end;
       gap: 12px;
     }
-    .crest{
-        width: 140px;
-        height: 140px;
-        border-radius: 18px;
-        background: rgba(255,255,255,.08);
-        border: 1px solid rgba(255,255,255,.18);
-        display: grid;
-        place-items: center;
-        box-shadow: var(--shadow2);
-    }
-    .crest svg{opacity:.9}
     .meta{
       display:flex;
       flex-direction:column;
@@ -371,6 +387,7 @@
       height:100%;
       object-fit:cover;
       filter: grayscale(10%) contrast(1.05);
+      display:block;
     }
     .coachBadge{
       padding: 10px 12px;
@@ -475,6 +492,7 @@
       height: 100px;
       object-fit:cover;
       filter: grayscale(10%) contrast(1.05);
+      display:block;
     }
     .player__label{
       padding: 8px 10px;
@@ -567,6 +585,7 @@
       height: 170px;
       object-fit:cover;
       filter: grayscale(8%) contrast(1.06);
+      display:block;
     }
     .city__body{
       padding: 10px 10px 12px;
@@ -587,104 +606,106 @@
       line-height:1.35;
       display:block;
     }
-  /* Page 7 — Sponsor (Kearys) */
-  .page--sponsor{
-    background: var(--black);
-  }
 
-  .sponsor__bg{
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
+    /* Page 7 — Sponsor (Kearys) */
+    .page--sponsor{
+      background: var(--black);
+    }
 
-  .sponsor__bg img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-  }
+    .sponsor__bg{
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
 
-  .sponsor__bg::after{
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(11,15,23,0) 0%,
-      rgba(11,15,23,0.1) 35%,
-      rgba(11,15,23,0.6) 55%,
-      rgba(11,15,23,0.95) 75%,
-      rgba(11,15,23,1) 100%
-    );
-    pointer-events: none;
-  }
+    .sponsor__bg img{
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+      object-position: center top;
+      display:block;
+    }
 
-  .sponsor__content{
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 50%;
-    z-index: 5;
-    padding: 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 12px;
-  }
+    .sponsor__bg::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(11,15,23,0) 0%,
+        rgba(11,15,23,0.1) 35%,
+        rgba(11,15,23,0.6) 55%,
+        rgba(11,15,23,0.95) 75%,
+        rgba(11,15,23,1) 100%
+      );
+      pointer-events: none;
+    }
 
-  .sponsorTitle{
-    font-family: var(--anton);
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    font-size: 32px;
-    margin: 0;
-    color: var(--white);
-  }
+    .sponsor__content{
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 50%;
+      z-index: 5;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 12px;
+    }
 
-  .sponsorCopy{
-    margin: 0;
-    color: rgba(255,255,255,.82);
-    font-size: 13px;
-    line-height: 1.55;
-  }
+    .sponsorTitle{
+      font-family: var(--anton);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-size: 32px;
+      margin: 0;
+      color: var(--white);
+    }
 
-  .sponsorBadges{
-    margin-top: 6px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+    .sponsorCopy{
+      margin: 0;
+      color: rgba(255,255,255,.82);
+      font-size: 13px;
+      line-height: 1.55;
+    }
 
-  .badge{
-    display:inline-flex;
-    align-items:center;
-    gap: 8px;
-    padding: 9px 12px;
-    border-radius: 999px;
-    background: rgba(30,91,255,.18);
-    border: 1px solid rgba(30,91,255,.35);
-    color: var(--ink);
-    font-weight: 900;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    font-size: 11px;
-    backdrop-filter: blur(6px);
-    width: fit-content;
-  }
+    .sponsorBadges{
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-  .page__number{
-    position: absolute;
-    bottom: 12px;
-    right: 16px;
-    z-index: 10;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .08em;
-    color: rgba(255,255,255,.65);
-    text-transform: uppercase;
-  }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(30,91,255,.18);
+      border: 1px solid rgba(30,91,255,.35);
+      color: var(--ink);
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: 11px;
+      backdrop-filter: blur(6px);
+      width: fit-content;
+    }
+
+    .page__number{
+      position: absolute;
+      bottom: 12px;
+      right: 16px;
+      z-index: 10;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.65);
+      text-transform: uppercase;
+    }
   </style>
 </head>
 
@@ -714,8 +735,11 @@
               <div>August 10 — August 17</div>
             </div>
 
-            <img src="./images/crest.png" alt="Team crest"
-                 style="width:90px; object-fit:contain; border-radius:14px;">
+            <img
+              src="./images/crest.png"
+              alt="Team crest"
+              style="width:90px; object-fit:contain; border-radius:14px;"
+            >
           </div>
         </div>
         <!-- <div class="page__number">1</div> -->
@@ -723,8 +747,6 @@
 
       <!-- 2) WELCOME -->
       <section class="page page--welcome">
-        <div class="band band--blue"></div>
-
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -751,36 +773,6 @@
         <div class="page__number">2</div>
       </section>
 
-      <!-- ===================== -->
-<!-- 1) ADD THIS NEW PAGE (after Destinations page) -->
-<!-- ===================== -->
-
-<!-- 7) SPONSOR — KEARYS -->
-<section class="page page--sponsor">
-  <div class="sponsor__bg">
-    <img src="./images/kearys_sponsor.png" alt="Kearys Car Store sponsor">
-  </div>
-  <div class="band band--blue"></div>
-  <div class="band band--blue2"></div>
-
-  <div class="sponsor__content">
-    <span class="chip">OUR SPONSOR</span>
-    <h3 class="sponsorTitle">Kearys Car Store</h3>
-    <p class="sponsorCopy">
-      A huge thank you to Kearys Car Store for supporting Cork Con on tour.
-      Your backing helps make the trip possible and keeps the squad moving.
-    </p>
-
-    <div class="sponsorBadges">
-      <span class="badge">Proud Tour Sponsor</span>
-      <span class="badge">Support Local</span>
-      <span class="badge">Thank You Kearys</span>
-    </div>
-  </div>
-  <div class="page__number">3</div>
-</section>
-
-
       <!-- 3) MATCH SCHEDULE -->
       <section class="page page--schedule">
         <svg class="watermark" viewBox="0 0 200 200" aria-hidden="true">
@@ -788,8 +780,6 @@
           <path d="M55 100h90" stroke="white" stroke-width="10"/>
           <path d="M100 55v90" stroke="white" stroke-width="10"/>
         </svg>
-
-        <div class="band band--blue"></div>
 
         <div class="page__inner">
           <header class="pageHeader">
@@ -826,13 +816,11 @@
             </div>
           </div>
         </div>
-        <div class="page__number">4</div>
+        <div class="page__number">3</div>
       </section>
 
       <!-- 4) SQUAD -->
       <section class="page page--squad">
-        <div class="band band--blue"></div>
-
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -841,8 +829,8 @@
 
           <div class="players">
             <article class="player">
-              <img src=\"https://picsum.photos/600/400?random=301\" alt=\"Player headshot\">
-              <div class=\"player__label\">
+              <img src="https://picsum.photos/600/400?random=301" alt="Player headshot">
+              <div class="player__label">
                 <strong>Name: James Smith</strong>
                 <p>Age: <small>25</small></p>
                 <p>Position: <small>Out-Half</small></p>
@@ -872,6 +860,7 @@
                 <small>SCRUM-HALF</small>
               </div>
             </article>
+
             <article class="player">
               <img src="https://picsum.photos/600/400?random=305" alt="Player headshot placeholder">
               <div class="player__label">
@@ -926,15 +915,14 @@
                 <strong>CHRIS "CHIEF" BUTLER</strong>
                 <small>OPENSIDE</small>
               </div>
-            </article>          </div>
+            </article>
+          </div>
         </div>
-        <div class="page__number">5</div>
+        <div class="page__number">4</div>
       </section>
 
       <!-- 5) ITINERARY -->
       <section class="page page--itinerary">
-        <div class="band band--blue"></div>
-
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -967,13 +955,11 @@
             </div>
           </div>
         </div>
-        <div class="page__number">6</div>
+        <div class="page__number">5</div>
       </section>
 
       <!-- 6) DESTINATIONS -->
       <section class="page page--destinations">
-        <div class="band band--blue"></div>
-
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -1004,6 +990,31 @@
                 <small>Local pubs • rivalry match • sightseeing</small>
               </div>
             </article>
+          </div>
+        </div>
+        <div class="page__number">6</div>
+      </section>
+
+      <!-- 7) SPONSOR — KEARYS -->
+      <section class="page page--sponsor">
+        <div class="sponsor__bg">
+          <img src="./images/kearys_sponsor.png" alt="Kearys Car Store sponsor">
+        </div>
+        <div class="band band--blue"></div>
+        <div class="band band--blue2"></div>
+
+        <div class="sponsor__content">
+          <span class="chip">OUR SPONSOR</span>
+          <h3 class="sponsorTitle">Kearys Car Store</h3>
+          <p class="sponsorCopy">
+            A huge thank you to Kearys Car Store for supporting Cork Con on tour.
+            Your backing helps make the trip possible and keeps the squad moving.
+          </p>
+
+          <div class="sponsorBadges">
+            <span class="badge">Proud Tour Sponsor</span>
+            <span class="badge">Support Local</span>
+            <span class="badge">Thank You Kearys</span>
           </div>
         </div>
         <div class="page__number">7</div>
