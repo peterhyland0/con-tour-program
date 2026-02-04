@@ -10,53 +10,102 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Paged.js -->
+  <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+
   <style>
-    /* ===== PRINT / PDF EXPORT ===== */
-    @page{
-      size: 210mm 297mm;   /* A4 */
+    /* =========================
+       PAGED.JS PRINT SETUP
+       ========================= */
+
+    @page {
+      size: A4;
       margin: 0;
     }
 
+    /* Optional: page numbers (turn on if you want)
+    @page {
+      @bottom-right {
+        content: counter(page);
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 10pt;
+        color: rgba(255,255,255,.65);
+        margin: 10mm 12mm;
+      }
+    }
+    */
+
+    /* Each section becomes a new printed page */
+    .spread{
+      page-break-after: always;
+      page-break-before: always;
+      page-break-inside: avoid;
+      break-after: page;
+      break-before: page;
+      break-inside: avoid;
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      overflow: hidden;
+      background: #111;
+      isolation: isolate;
+    }
+    .spread:first-child{ 
+      page-break-before: auto;
+      break-before: auto; 
+    }
+    .spread:last-child{
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    /* When viewing on screen, you can enable thumbnail preview by adding class="preview" to <body> */
+    body.preview{
+      background: #E9EDF3;
+    }
+    body.preview .wrap{
+      max-width: 1400px;
+      margin: 32px auto;
+      padding: 16px;
+    }
+    body.preview .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+    body.preview .spread{
+      width: 100%;
+      height: auto;
+      aspect-ratio: 210 / 297; /* true A4 ratio */
+      max-width: 420px;
+      box-shadow: 0 18px 45px rgba(15,25,40,.18);
+      border-radius: 14px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1100px){
+      body.preview .grid{ grid-template-columns: repeat(2, minmax(260px, 1fr)); }
+    }
+    @media (max-width: 720px){
+      body.preview .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Print/PDF color fidelity */
     @media print{
-      /* Remove browser default print margins and screen background */
-      html, body{
-        margin: 0 !important;
-        padding: 0 !important;
-        background: #fff !important;
-      }
-
-      /* Ensure the wrapper/grid doesn't affect print layout */
-      .wrap{ margin:0 !important; padding:0 !important; max-width:none !important; }
-      .grid{ display:block !important; }
-
-      /* Each .page becomes a full A4 page */
-      .page{
-        width: 210mm !important;
-        height: 297mm !important;
-        max-width: none !important;
-        aspect-ratio: auto !important;
-        box-shadow: none !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        page-break-after: always;
-        break-after: page;
-      }
-      .page:last-child{
-        page-break-after: auto;
-        break-after: auto;
-      }
-
-      /* Keep colors/gradients in print/PDF */
       *{
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
-
-      /* Avoid magenta/pink shifts in Chromium PDF rendering:
-         disable blend-mode behavior in print */
-      .page--sponsor::before,
-      .page--sponsor::after{
-        mix-blend-mode: normal !important;
+      html, body{
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+      .wrap, .grid{
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: none !important;
       }
     }
 
@@ -64,68 +113,35 @@
       --blue:#1E5BFF;
       --black:#0B0F17;
       --white:#FFFFFF;
-      --bg:#E9EDF3;
       --ink: rgba(255,255,255,.92);
       --muted: rgba(255,255,255,.72);
-      --shadow: 0 18px 45px rgba(15,25,40,.18);
       --shadow2: 0 6px 16px rgba(15,25,40,.16);
-      --page-w: 420px;
-      --page-h: 560px;
-      --radius: 14px;
       --anton: "Anton", system-ui, sans-serif;
       --inter: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     }
 
-    *{ box-sizing:border-box; }
+    *{ box-sizing: border-box; }
     body{
       margin:0;
       font-family: var(--inter);
-      background: var(--bg);
+      background: #fff; /* print-first */
       color:#111;
     }
 
-    .wrap{
-      max-width: 1400px;
-      margin: 32px auto;
-      padding: 16px;
-    }
+    .wrap{ margin:0; padding:0; }
+    .grid{ display:block; } /* print-first flow */
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(260px, 1fr));
-      gap: 22px;
-      align-items: start;
-    }
+    /* =========================
+       COMMON UI
+       ========================= */
 
-    @media (max-width: 1100px){
-      .grid{ grid-template-columns: repeat(2, minmax(260px, 1fr)); }
-    }
-    @media (max-width: 720px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+    /* Disable global overlays to avoid PDF pink shifts.
+       We’ll enable overlays only on sponsor page if needed. */
+    .spread::before{ content:none; }
+    .spread::after{ content:none; }
 
-    /* Page Card */
-    .page{
-      width: 100%;
-      aspect-ratio: 3 / 4; /* ~A4-ish portrait */
-      max-width: var(--page-w);
-      margin: 0 auto;
-      background: #111;
-      /* border-radius: var(--radius); */
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position: relative;
-      isolation:isolate;
-    }
-
-    /* IMPORTANT:
-       Remove global overlays (these cause pink/magenta in PDF due to blend modes).
-       Sponsor-only overlays are added below. */
-    .page::before{ content:none; }
-    .page::after{ content:none; }
-
-    /* Sponsor-only “refined fade” overlay */
-    .page--sponsor::before{
+    /* Optional sponsor-only refined overlay (safe: no blend modes) */
+    .spread--sponsor::before{
       content:"";
       position:absolute; inset:0;
       background:
@@ -133,18 +149,14 @@
         radial-gradient(900px 500px at 110% -10%, rgba(255,255,255,.06), transparent 50%);
       pointer-events:none;
       z-index: 2;
-      /* No blend-mode to avoid PDF color shift */
       opacity:.6;
     }
-
-    /* Sponsor-only grain overlay */
-    .page--sponsor::after{
+    .spread--sponsor::after{
       content:"";
       position:absolute; inset:0;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
       pointer-events:none;
       z-index: 3;
-      /* No blend-mode to avoid PDF color shift */
       opacity:.12;
     }
 
@@ -157,13 +169,6 @@
       z-index: 4;
     }
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap: 12px;
-    }
-
     .h1{
       font-family: var(--anton);
       letter-spacing: .5px;
@@ -171,14 +176,6 @@
       color: var(--white);
       text-transform: uppercase;
       margin:0;
-    }
-
-    .kicker{
-      font-size: 12px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.78);
-      font-weight: 700;
     }
 
     .chip{
@@ -195,12 +192,6 @@
       font-size: 12px;
       width: fit-content;
       backdrop-filter: blur(6px);
-    }
-
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.14);
-      width:100%;
     }
 
     /* Diagonal band helpers */
@@ -223,15 +214,42 @@
       top: 68%;
     }
 
-    /* Page 1 — Cover */
-    .page--cover{
-      background: var(--black);
+    .pageHeader{
+      position: relative;
+      padding: 12px 14px;
+      border-radius: 12px;
+      overflow:hidden;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(6px);
     }
+    .pageHeader__title{
+      font-family: var(--anton);
+      font-size: 30px;
+      letter-spacing:.03em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin:0;
+      position:relative;
+      z-index:2;
+    }
+    .pageHeader__brush{
+      position:absolute; inset:-20px -30px;
+      background: linear-gradient(90deg, rgba(30,91,255,.0), rgba(30,91,255,.55), rgba(30,91,255,.0));
+      transform: rotate(-6deg);
+      opacity:.85;
+      z-index:1;
+    }
+
+    /* =========================
+       PAGE 1 — COVER
+       ========================= */
+
+    .spread--cover{ background: var(--black); }
+
     .cover__bg{
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 55%;
       z-index: 0;
     }
@@ -257,10 +275,7 @@
     }
     .cover__content{
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: 45%;
+      left: 0; right: 0; bottom: 0; top: 45%;
       z-index: 5;
       padding: 22px;
       display: flex;
@@ -268,16 +283,11 @@
       justify-content: flex-end;
       gap: 14px;
     }
-    .cover__title{
-      margin-top: 0;
-    }
     .cover__title .h1{
       font-size: 54px;
       text-shadow: 0 10px 30px rgba(0,0,0,.45);
     }
-    .cover__title .h1 span{
-      color: var(--blue);
-    }
+    .cover__title .h1 span{ color: var(--blue); }
     .ribbon{
       margin-top: 10px;
       padding: 8px 12px;
@@ -297,13 +307,13 @@
       justify-content:space-between;
       align-items:flex-end;
       gap: 12px;
+      color: var(--ink);
+      font-weight: 800;
     }
     .meta{
       display:flex;
       flex-direction:column;
       gap: 6px;
-      color: var(--ink);
-      font-weight: 800;
     }
     .meta small{
       color: rgba(255,255,255,.72);
@@ -313,39 +323,12 @@
       font-size: 11px;
     }
 
-    /* Page headers used on multiple pages */
-    .pageHeader{
-      position: relative;
-      padding: 12px 14px;
-      border-radius: 12px;
-      overflow:hidden;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      backdrop-filter: blur(6px);
-    }
-    .pageHeader__title{
-      font-family: var(--anton);
-      font-size: 30px;
-      letter-spacing:.03em;
-      color: var(--white);
-      text-transform: uppercase;
-      margin:0;
-      position:relative;
-      z-index:2;
-    }
-    .pageHeader__brush{
-      position:absolute; inset:-20px -30px;
-      background:
-        linear-gradient(90deg, rgba(30,91,255,.0), rgba(30,91,255,.55), rgba(30,91,255,.0));
-      transform: rotate(-6deg);
-      opacity:.85;
-      z-index:1;
-    }
+    /* =========================
+       PAGE 2 — WELCOME
+       ========================= */
 
-    /* Page 2 — Welcome */
-    .page--welcome{
-      background:
-        linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
+    .spread--welcome{
+      background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
     }
     .welcome__layout{
       display:grid;
@@ -401,8 +384,11 @@
       color: var(--ink);
     }
 
-    /* Page 3 — Match Schedule */
-    .page--schedule{
+    /* =========================
+       PAGE 3 — SCHEDULE
+       ========================= */
+
+    .spread--schedule{
       background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
     }
     .matches{
@@ -466,8 +452,11 @@
       pointer-events:none;
     }
 
-    /* Page 4 — Squad */
-    .page--squad{
+    /* =========================
+       PAGE 4 — SQUAD
+       ========================= */
+
+    .spread--squad{
       background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
     }
     .players{
@@ -523,8 +512,11 @@
       font-weight: 600;
     }
 
-    /* Page 5 — Itinerary */
-    .page--itinerary{
+    /* =========================
+       PAGE 5 — ITINERARY
+       ========================= */
+
+    .spread--itinerary{
       background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
     }
     .days{
@@ -559,8 +551,11 @@
     .day h4{ margin:0; text-transform:uppercase; letter-spacing:.05em; font-size: 13px; }
     .day p{ margin:6px 0 0 0; color: rgba(255,255,255,.75); font-size: 12.5px; line-height:1.45; }
 
-    /* Page 6 — Destinations */
-    .page--destinations{
+    /* =========================
+       PAGE 6 — DESTINATIONS
+       ========================= */
+
+    .spread--destinations{
       background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
     }
     .cities{
@@ -607,8 +602,11 @@
       display:block;
     }
 
-    /* Page 7 — Sponsor (Kearys) */
-    .page--sponsor{
+    /* =========================
+       PAGE 7 — SPONSOR
+       ========================= */
+
+    .spread--sponsor{
       background: var(--black);
     }
 
@@ -617,7 +615,6 @@
       inset: 0;
       z-index: 0;
     }
-
     .sponsor__bg img{
       width: 100%;
       height: 50%;
@@ -625,7 +622,6 @@
       object-position: center top;
       display:block;
     }
-
     .sponsor__bg::after{
       content: "";
       position: absolute;
@@ -653,8 +649,8 @@
       flex-direction: column;
       justify-content: flex-end;
       gap: 12px;
+      color: var(--ink);
     }
-
     .sponsorTitle{
       font-family: var(--anton);
       letter-spacing: .05em;
@@ -663,21 +659,18 @@
       margin: 0;
       color: var(--white);
     }
-
     .sponsorCopy{
       margin: 0;
       color: rgba(255,255,255,.82);
       font-size: 13px;
       line-height: 1.55;
     }
-
     .sponsorBadges{
       margin-top: 6px;
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
-
     .badge{
       display:inline-flex;
       align-items:center;
@@ -691,22 +684,16 @@
       letter-spacing: .06em;
       text-transform: uppercase;
       font-size: 11px;
-      backdrop-filter: blur(6px);
       width: fit-content;
     }
-
-    .page__number{
-      position: absolute;
-      bottom: 12px;
-      right: 16px;
-      z-index: 10;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      color: rgba(255,255,255,.65);
-      text-transform: uppercase;
-    }
   </style>
+
+  <script>
+    // Playwright will wait on this promise before creating the PDF.
+    window.PAGED_READY = new Promise((resolve) => {
+      document.addEventListener("pagedjs:rendered", () => resolve(true), { once: true });
+    });
+  </script>
 </head>
 
 <body>
@@ -714,7 +701,7 @@
     <div class="grid">
 
       <!-- 1) COVER -->
-      <section class="page page--cover">
+      <section class="spread spread--cover">
         <div class="cover__bg">
           <img src="./images/image.png" alt="Cover background">
         </div>
@@ -723,7 +710,7 @@
 
         <div class="cover__content">
           <div class="cover__title">
-            <h1 class="h1">Cork<br><span>Con</span><br>Tour<br><span>2026</span></h1>
+            <h1 class="h1">Cork<br><span style="color:var(--blue)">Con</span><br>Tour<br><span style="color:var(--blue)">2026</span></h1>
             <div class="ribbon">TOUR PROGRAM</div>
           </div>
 
@@ -735,18 +722,14 @@
               <div>August 10 — August 17</div>
             </div>
 
-            <img
-              src="./images/crest.png"
-              alt="Team crest"
-              style="width:90px; object-fit:contain; border-radius:14px;"
-            >
+            <img src="./images/crest.png" alt="Team crest"
+                 style="width:90px; object-fit:contain; border-radius:14px;">
           </div>
         </div>
-        <!-- <div class="page__number">1</div> -->
       </section>
 
       <!-- 2) WELCOME -->
-      <section class="page page--welcome">
+      <section class="spread spread--welcome">
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -770,11 +753,10 @@
             </div>
           </div>
         </div>
-        <div class="page__number">2</div>
       </section>
 
       <!-- 3) MATCH SCHEDULE -->
-      <section class="page page--schedule">
+      <section class="spread spread--schedule">
         <svg class="watermark" viewBox="0 0 200 200" aria-hidden="true">
           <circle cx="100" cy="100" r="70" stroke="white" stroke-width="10" fill="none"/>
           <path d="M55 100h90" stroke="white" stroke-width="10"/>
@@ -816,11 +798,10 @@
             </div>
           </div>
         </div>
-        <div class="page__number">3</div>
       </section>
 
       <!-- 4) SQUAD -->
-      <section class="page page--squad">
+      <section class="spread spread--squad">
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -841,7 +822,7 @@
               <img src="https://picsum.photos/600/400?random=302" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>MIKE “SPEEDY” WILSON</strong>
-                <small>WING</small>
+                <p>Position: <small>WING</small></p>
               </div>
             </article>
 
@@ -849,7 +830,7 @@
               <img src="https://picsum.photos/600/400?random=303" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>ROB “TANK” ROBERTS</strong>
-                <small>PROP</small>
+                <p>Position: <small>PROP</small></p>
               </div>
             </article>
 
@@ -857,7 +838,7 @@
               <img src="https://picsum.photos/600/400?random=304" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>ALEX “ACE” CARTER</strong>
-                <small>SCRUM-HALF</small>
+                <p>Position: <small>SCRUM-HALF</small></p>
               </div>
             </article>
 
@@ -865,7 +846,7 @@
               <img src="https://picsum.photos/600/400?random=305" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>DAVID "ROCK" MURPHY</strong>
-                <small>HOOKER</small>
+                <p>Position: <small>HOOKER</small></p>
               </div>
             </article>
 
@@ -873,7 +854,7 @@
               <img src="https://picsum.photos/600/400?random=306" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>LIAM "LION" WALSH</strong>
-                <small>FLANKER</small>
+                <p>Position: <small>FLANKER</small></p>
               </div>
             </article>
 
@@ -881,7 +862,7 @@
               <img src="https://picsum.photos/600/400?random=307" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>SEAN "SWIFT" RYAN</strong>
-                <small>FULLBACK</small>
+                <p>Position: <small>FULLBACK</small></p>
               </div>
             </article>
 
@@ -889,7 +870,7 @@
               <img src="https://picsum.photos/600/400?random=308" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>PAUL "POWER" KELLY</strong>
-                <small>LOCK</small>
+                <p>Position: <small>LOCK</small></p>
               </div>
             </article>
 
@@ -897,7 +878,7 @@
               <img src="https://picsum.photos/600/400?random=309" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>MARK "MAGNET" DOHERTY</strong>
-                <small>NUMBER 8</small>
+                <p>Position: <small>NUMBER 8</small></p>
               </div>
             </article>
 
@@ -905,7 +886,7 @@
               <img src="https://picsum.photos/600/400?random=310" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>JOHN "JACK" BRENNAN</strong>
-                <small>CENTRE</small>
+                <p>Position: <small>CENTRE</small></p>
               </div>
             </article>
 
@@ -913,16 +894,15 @@
               <img src="https://picsum.photos/600/400?random=311" alt="Player headshot placeholder">
               <div class="player__label">
                 <strong>CHRIS "CHIEF" BUTLER</strong>
-                <small>OPENSIDE</small>
+                <p>Position: <small>OPENSIDE</small></p>
               </div>
             </article>
           </div>
         </div>
-        <div class="page__number">4</div>
       </section>
 
       <!-- 5) ITINERARY -->
-      <section class="page page--itinerary">
+      <section class="spread spread--itinerary">
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -955,11 +935,10 @@
             </div>
           </div>
         </div>
-        <div class="page__number">5</div>
       </section>
 
       <!-- 6) DESTINATIONS -->
-      <section class="page page--destinations">
+      <section class="spread spread--destinations">
         <div class="page__inner">
           <header class="pageHeader">
             <div class="pageHeader__brush"></div>
@@ -992,11 +971,10 @@
             </article>
           </div>
         </div>
-        <div class="page__number">6</div>
       </section>
 
       <!-- 7) SPONSOR — KEARYS -->
-      <section class="page page--sponsor">
+      <section class="spread spread--sponsor">
         <div class="sponsor__bg">
           <img src="./images/kearys_sponsor.png" alt="Kearys Car Store sponsor">
         </div>
@@ -1017,7 +995,6 @@
             <span class="badge">Thank You Kearys</span>
           </div>
         </div>
-        <div class="page__number">7</div>
       </section>
 
     </div>

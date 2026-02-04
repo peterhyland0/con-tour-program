@@ -6,27 +6,35 @@ const { pathToFileURL } = require("url");
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
+  // OPTIONAL: block slow placeholder images
+  await page.route("**/*", (route) => {
+    const url = route.request().url();
+    if (url.includes("picsum.photos")) return route.abort(); // comment out if you want them
+    return route.continue();
+  });
+
   const htmlPath = path.resolve(__dirname, "index.html");
   const fileUrl = pathToFileURL(htmlPath).href;
 
-  await page.goto(fileUrl, { waitUntil: "networkidle" });
+  // Faster + more predictable than networkidle
+  await page.goto(fileUrl, { waitUntil: "load", timeout: 60000 });
 
-  // ✅ ensure fonts are ready (Google Fonts)
-  await page.evaluate(() => document.fonts.ready);
+  // Wait for fonts, but don't hang forever
+  await page.evaluate(() => Promise.race([
+    document.fonts?.ready ?? Promise.resolve(true),
+    new Promise(res => setTimeout(res, 5000))
+  ]));
 
-  // ✅ force @media print rules to apply
-  await page.emulateMedia({ media: "print" });
+  // Wait for paged.js, but add a hard timeout fallback
+  await page.evaluate(() => Promise.race([
+    window.PAGED_READY ?? Promise.resolve(true),
+    new Promise(res => setTimeout(res, 15000))
+  ]));
 
   await page.pdf({
     path: "tour-program.pdf",
     printBackground: true,
-
-    // ✅ let CSS @page size win (210mm x 297mm)
     preferCSSPageSize: true,
-
-    // Optional: if you keep format, it can override CSS in some cases
-    // format: "A4",
-
     margin: { top: 0, right: 0, bottom: 0, left: 0 }
   });
 
