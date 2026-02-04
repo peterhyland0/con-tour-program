@@ -47,10 +47,15 @@
       width: 210mm;
       height: 297mm;
       overflow: hidden;
-      background: #111;
+      background: #0B0F17;
+      background-clip: padding-box;
       isolation: isolate;
       box-sizing: border-box;
       page: spread;
+      /* Prevent any transparency/overlap between pages */
+      z-index: 1;
+      margin: 0;
+      padding: 0;
     }
     .spread:first-child{ 
       page-break-before: auto;
@@ -114,11 +119,15 @@
         padding: 0 !important;
         max-width: none !important;
       }
+      .grid .spread {
+        margin-bottom: 0 !important;
+      }
       .spread{
         page-break-after: always !important;
         break-after: page !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        background: #0B0F17 !important;
       }
       .spread:first-child{
         page-break-before: avoid !important;
@@ -150,7 +159,18 @@
     }
 
     .wrap{ margin:0; padding:0; }
-    .grid{ display:block; } /* print-first flow */
+    .grid{ 
+      display:block; /* print-first flow */
+    }
+    
+    /* Ensure pages don't overlap in web view */
+    .grid .spread {
+      display: block;
+      margin-bottom: 20px;
+    }
+    .grid .spread:last-child {
+      margin-bottom: 0;
+    }
 
     /* =========================
        COMMON UI
@@ -353,7 +373,7 @@
        ========================= */
 
     .spread--welcome{
-      background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
+      background: #0B0F17;
     }
     .welcome__layout{
       display:grid;
@@ -414,7 +434,7 @@
        ========================= */
 
     .spread--schedule{
-      background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
+      background: #0B0F17;
     }
     .matches{
       display:flex;
@@ -482,7 +502,7 @@
        ========================= */
 
     .spread--squad{
-      background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
+      background: #0B0F17;
     }
     .players{
       display:grid;
@@ -543,7 +563,7 @@
        ========================= */
 
     .spread--itinerary{
-      background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
+      background: #0B0F17;
     }
     .days{
       display:flex;
@@ -582,7 +602,7 @@
        ========================= */
 
     .spread--destinations{
-      background: linear-gradient(180deg, rgba(11,15,23,.92), rgba(11,15,23,.98));
+      background: #0B0F17;
     }
     .cities{
       display:grid;
