@@ -505,6 +505,81 @@
       /* object-fit: contain; */
       filter: brightness(1.1);
     }
+    .sponsor-placeholder{
+      position: relative;
+      z-index: 2;
+      height: 110%;
+      width: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #111;
+      border-radius: 6px;
+      font-weight: 700;
+      font-family: var(--inter);
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .sponsor-placeholder--large{
+      width: 100%;
+      height: 50%;
+      min-height: 160px;
+      font-size: 18px;
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    /* Image placeholders used in articles */
+    .img-placeholder{
+      display: block;
+      background: linear-gradient(180deg,#ffffff,#f0f0f0);
+      border: 1px solid #e2e2e2;
+      color: #666;
+      font-weight: 700;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .img-placeholder--small{
+      width: 120px;
+      height: 120px;
+      border-radius: 8px;
+    }
+    .img-placeholder--banner{
+      max-width: 60%;
+      height: 80px;
+      border-radius: 8px;
+      margin: 0 auto;
+    }
+    .img-placeholder--large{
+      max-width: 70%;
+      height: 180px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .img-placeholder--right{ float: right; margin: 0 0 12px 16px; }
+    .img-placeholder--left{ float: left; margin: 0 16px 12px 0; width: 100%; height: 180px; border-radius: 10px; display: block; }
+    @media (max-width: 900px){
+      .img-placeholder--right, .img-placeholder--left{ float:none; margin: 12px auto; display:block; }
+    }
+    .img-placeholder--full{
+      width: 48%;
+      height: 180px;
+      border-radius: 10px;
+      margin: 12px 0;
+      display: block;
+      float: none;
+      -webkit-column-span: all;
+      column-span: all;
+    }
+    .img-caption{
+      font-size: 12px;
+      color: rgba(0,0,0,.6);
+      margin: 6px 0 12px 0;
+      font-style: italic;
+    }
 
     /* =========================
        PAGE 3 — WELCOME
@@ -645,10 +720,10 @@
     .players{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      flex:1;
+      gap: 5px;
+      /* flex:1; */
       min-height:0;
-      margin-top: 4px;
+      /* margin-top: 4px; */
     }
     .player{
       border-radius: 6px;
@@ -658,11 +733,12 @@
       display:flex;
       flex-direction:column;
       min-height:0;
-      max-height: 140px;
+      max-height: 250px;
+      margin-top: 25px;
     }
     .player img{
       width:100%;
-      height: 75px;
+      height: 350px;
       object-fit:cover;
       filter: grayscale(10%) contrast(1.05);
       display:block;
@@ -675,11 +751,11 @@
     }
     .player__label strong{
       display:block;
-      font-size: 9px;
+      font-size: 13px;
       letter-spacing:.05em;
       text-transform:uppercase;
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.2;
     }
     .player__label p{
       margin: 2px 0;
@@ -687,13 +763,14 @@
       font-weight: 600;
       letter-spacing: .02em;
       text-transform: uppercase;
-      font-size: 8px;
-      line-height: 1.0;
+      font-size: 11px;
+      line-height: 1.1;
     }
     .player__label p small{
       color: rgba(255,255,255,.72);
       display: inline;
       font-weight: 600;
+      font-size: 11px;
     }
 
     /* =========================
@@ -871,6 +948,231 @@
       font-size: 11px;
       width: fit-content;
     }
+    /* =========================
+       ARTICLE PAGES — DONAL LINEHAN
+       ========================= */
+    .spread--article{
+      background:
+        radial-gradient(900px 420px at 110% -10%, rgba(30,91,255,.12), transparent 60%),
+        radial-gradient(760px 360px at -10% 115%, rgba(30,91,255,.08), transparent 62%),
+        linear-gradient(180deg,#f8fbff,#eef3f9 48%, #edf2f8);
+      color: #132033;
+    }
+    .spread--article .page__inner{
+      padding: 24px 24px calc(11% + 18px);
+      color: #132033;
+      gap: 10px;
+    }
+    .spread--article .letter__content{
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      flex: 1;
+      gap: 12px;
+    }
+    .spread--article .letter__header{
+      background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(243,247,255,.94));
+      border: 1px solid rgba(15,28,48,.11);
+      border-left: 6px solid var(--blue);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(20,32,51,.08);
+      padding: 16px 18px;
+      display: block;
+    }
+    .spread--article .letter__header__brush{
+      display: none;
+    }
+    .article__kicker{
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      border-radius: 999px;
+      background: rgba(30,91,255,.12);
+      color: #1a3d95;
+      border: 1px solid rgba(30,91,255,.24);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .spread--article .letter__title{
+      font-size: 38px;
+      line-height: .95;
+      letter-spacing: .01em;
+      color: #0f1b31;
+      margin-bottom: 4px;
+    }
+    .spread--article .letter__subtitle{
+      color: rgba(15,27,49,.68);
+      letter-spacing: .08em;
+      font-size: 11px;
+    }
+    .spread--article .letter__body{
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(20,33,54,.14);
+      border-radius: 14px;
+      padding: 18px 20px 20px;
+      box-shadow: 0 14px 30px rgba(20,32,51,.08);
+      overflow: auto;
+    }
+    .spread--article .letter__body::before{
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #1E5BFF, #7CB2FF);
+    }
+    .article__meta{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(15,27,49,.11);
+      font-size: 10px;
+      color: rgba(15,27,49,.64);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .article__lead{
+      font-size: 16px;
+      line-height: 1.45;
+      color: rgba(15,27,49,.78);
+      margin: 0 0 14px 0;
+      font-weight: 500;
+    }
+    .article__content{
+      column-count: 2;
+      column-gap: 34px;
+      column-rule: 1px solid rgba(20,32,51,.09);
+      font-size: 13.5px;
+      line-height: 1.66;
+      color: rgba(10,20,34,.9);
+      padding: 4px 2px 2px;
+    }
+    .article__content p{
+      margin: 0 0 12px 0;
+      color: rgba(10,20,34,.9);
+    }
+    .article__content p:first-of-type::first-letter{
+      float: left;
+      font-family: var(--anton);
+      font-size: 50px;
+      line-height: .82;
+      padding: 3px 8px 0 0;
+      color: #1847c6;
+    }
+    .article__content::after{
+      content: "";
+      display: block;
+      clear: both;
+    }
+    .article__pullquote{
+      display: block;
+      break-inside: avoid-column;
+      margin: 0 0 14px 0;
+      padding: 12px 14px;
+      border-left: 4px solid #1E5BFF;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(30,91,255,.1), rgba(30,91,255,.02));
+      color: #103266;
+      font-size: 15px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+    .article__figure{
+      break-inside: avoid-column;
+      margin: 4px 0 12px 0;
+    }
+    .article__figure--left{
+      float: left;
+      width: 48%;
+      margin: 4px 16px 12px 0;
+    }
+    .spread--article .article__figure .img-placeholder{
+      width: 100%;
+      height: 190px;
+      border-radius: 12px;
+      border: 1px solid rgba(19,43,80,.22);
+      background: linear-gradient(180deg,#f8fbff,#deebff);
+      color: #36558a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+    .spread--article .img-caption{
+      margin: 6px 0 0 0;
+      font-size: 11px;
+      line-height: 1.35;
+      color: rgba(16,35,70,.65);
+      font-style: italic;
+    }
+    .article__continuation{
+      margin: 0 0 10px 0;
+      font-size: 10px;
+      color: rgba(15,27,49,.62);
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 900px){
+      .article__content{
+        column-count: 1;
+      }
+      .article__figure--left{
+        float: none;
+        width: 100%;
+        margin: 6px 0 12px 0;
+      }
+    }
+
+    /* Theme polish */
+    .spread--cover,
+    .spread--letter,
+    .spread--welcome,
+    .spread--schedule,
+    .spread--squad,
+    .spread--itinerary,
+    .spread--destinations{
+      background:
+        radial-gradient(1000px 560px at -15% 110%, rgba(30,91,255,.16), transparent 60%),
+        radial-gradient(900px 520px at 115% -15%, rgba(83,154,255,.14), transparent 62%),
+        linear-gradient(180deg, #0b1220, #0a0f19);
+    }
+    .pageHeader,
+    .panel,
+    .match,
+    .day,
+    .city,
+    .player,
+    .letter__body,
+    .sponsorFooter{
+      border-color: rgba(120,165,255,.2);
+      box-shadow: 0 12px 28px rgba(8,14,26,.28);
+    }
+    .pageHeader__title{
+      text-shadow: 0 5px 18px rgba(9,18,35,.35);
+    }
+    .chip{
+      background: rgba(30,91,255,.22);
+      border: 1px solid rgba(120,165,255,.34);
+    }
+    .sponsorFooter{
+      background: linear-gradient(180deg, rgba(15,24,39,.72), rgba(10,15,25,.88));
+      backdrop-filter: blur(8px);
+    }
   </style>
 
   <script>
@@ -951,8 +1253,102 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+        </div>
+      </section>
+
+      <!-- NEW: 2-PAGE MOCK ARTICLE FROM DONAL LINEHAN (styled like letter pages) -->
+      <section class="spread spread--article spread--letter">
+        <div class="page__inner">
+          <div class="letter__content">
+            <div class="letter__header">
+              <div class="letter__header__brush"></div>
+              <span class="article__kicker">Feature Story</span>
+              <h3 class="letter__title">Reflections Ahead Of The Tour</h3>
+              <p class="letter__subtitle">Donal Linehan — Sports Correspondent</p>
+            </div>
+
+            <div class="letter__body">
+              <p class="article__lead">Donal Linehan offers a considered take on the club's preparation, history and the meaning of a tour away from home.</p>
+
+              <div class="article__content">
+                <p>The Cork Con tour has always been more than a sequence of fixtures; it is a living, breathing expression of a community. In the weeks leading up to departure you can feel the club's heartbeat — training grounds buzzing, kitrooms alive with purpose, and an optimism that is part ritual, part necessity.</p>
+
+                <figure class="article__figure article__figure--left">
+                  <div class="img-placeholder" aria-hidden="true">Photo Placeholder</div>
+                  <figcaption class="img-caption">Supporters and players gather at Temple Hill before departure.</figcaption>
+                </figure>
+
+                <p>On the face of it, a tour is about rugby: patterns, fitness, and the occasional great victory. But the less visible work — the conversations on the bus, the shared meals, the quiet encouragement after a testing session — are what shape the squad into more than the sum of its players.</p>
+
+                <p>The management team have put significant thought into balancing playing time with rest, and the schedule reflects an awareness that player welfare underpins long-term success. That attention to detail can be the difference between a team that arrives fatigued and one that returns with memories and lessons intact.</p>
+
+                <p class="article__pullquote">"Touring exposes character. The strongest squads are those who treat every day away as part of one shared performance."</p>
+
+                <p>There is also the wider backdrop: from supporters who fundraise to local partners who open doors abroad. Touring remains an expensive endeavour, yet it yields returns that are social as much as sporting. Young players gain confidence. Senior players find renewed leadership responsibilities. The club's profile is quietly elevated.</p>
+
+                <p>At the centre of it all are the players themselves: a group whose commitment to wearing the jersey transcends the scoreboard. For many, these tours are formative chapters — moments that inform careers, friendships and a lifelong affinity with the club.</p>
+                <p>Beyond the pitch, the support network that surrounds the squad is quietly heroic: volunteers who organise travel logistics, families who host visiting players, and alumni who offer counsel. These contributions create an environment in which young players can focus on growth without being consumed by the practicalities of touring.</p>
+
+                <p>Preparation also involves small rituals that bind a team together — a shared warm-up routine, a pre-match playlist, or a simple handshake that signals concentration. It is in these repeated gestures that group culture is formed and leadership is tested.</p>
+
+                <p>Looking ahead, the club's aim is not only to compete but to return enriched: players who have learned, supporters who have stories to tell, and relationships abroad that open future opportunities for exchange and development.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sponsorFooter">
+          <div class="sponsorFooter__brush"></div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+        </div>
+      </section>
+
+      <section class="spread spread--article spread--letter">
+        <div class="page__inner">
+          <div class="letter__content">
+            <div class="letter__header">
+              <div class="letter__header__brush"></div>
+              <span class="article__kicker">Feature Story</span>
+              <h3 class="letter__title">Reflections Ahead Of The Tour</h3>
+              <p class="letter__subtitle">Donal Linehan — Sports Correspondent</p>
+            </div>
+            <div class="letter__body">
+              <p class="article__continuation">Continued from previous page</p>
+              <div class="article__content">
+                <p>There is a delicate craft to blending ambition with humility. Teams that tour well are those that respect the opposition, the host culture and the simple logistics of travel. Plan well, listen to your bodies, and treat every encounter as an opportunity to learn.</p>
+
+                <p>Each tour becomes a catalogue of small victories, not all of them recorded on a scoreboard: a player overcoming a setback, a collective recovery after a tough fixture, and the quiet satisfactions of routine done well. These moments, stitched together, define the narrative that the club will recount in years to come.</p>
+
+                <p>The moments of levity are no less important: a late-night sing-song, a local café discovery, the relief of a shared joke after a long day. These memories stitch themselves into the fabric of a team's identity, long after the scoreboard has been forgotten.</p>
+
+                <p>As the squad steps onto foreign soil, there will be nerves and excitement in equal measure. What matters most is that the club leaves behind not only a record of matches played, but an impression of character — sportsmanship, courtesy, and the warmth that visitors carry back as ambassadors of Cork Con.</p>
+
+                <p>When the tour concludes, conversations will shift from analysis to reflection. The best measure of success will be the stories told years from now, and the knowledge that a group of players and supporters did something together that mattered.</p>
+                <p>In quiet moments between fixtures, players often take stock of small improvements: sharper passing lines, better set-piece communication, or marginal gains in conditioning. These incremental steps rarely make the headlines, but they are the true currency of progress.</p>
+
+                <p>Coaches and support staff emphasise continuity — creating routines that survive travel disruptions and short recovery windows. This kind of disciplined consistency helps a touring side remain steady when plans inevitably change.</p>
+
+                <p>Beyond the team bubble, the local communities that welcome visiting sides add texture to the experience. Friendly encounters at cafés or with youth teams can be as meaningful as any result on the field — they remind players why the sport matters at a human level.</p>
+
+                <p>For younger squad members, the chance to see different coaching approaches and local playing styles is invaluable. Exposure broadens tactical understanding and nurtures adaptability — traits that serve a player well long after the tour ends.</p>
+
+                <p>Ultimately, tours succeed when planning, character and goodwill converge. This year's trip will be measured in memories, lessons learned and the quiet strengthening of relationships that will support Cork Con for seasons to come.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sponsorFooter">
+          <div class="sponsorFooter__brush"></div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
       </section>
 
@@ -994,8 +1390,10 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
       </section>
 
@@ -1027,8 +1425,10 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
       </section>
 
@@ -1078,12 +1478,142 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
       </section>
 
       <!-- 6) SQUAD -->
+      <section class="spread spread--squad">
+        <div class="page__inner">
+          <header class="pageHeader">
+            <div class="pageHeader__brush"></div>
+            <h2 class="pageHeader__title">THE SQUAD</h2>
+          </header>
+
+          <div class="players">
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=301" alt="Player headshot">
+              <div class="player__label">
+                <strong>James Smith</strong>
+                <p>Age: <small>25</small></p>
+                <p>Position: <small>Out-Half</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=302" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>MIKE WILSON</strong>
+                <p>Age: <medium>24</small></p>
+                <p>Position: <medium>WING</medium></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=303" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>ROB ROBERTS</strong>
+                <p>Age: <small>27</small></p>
+                <p>Position: <small>PROP</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=304" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>ALEX CARTER</strong>
+                <p>Age: <small>27</small></p>
+                <p>Position: <small>SCRUM-HALF</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=305" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>DAVID MURPHY</strong>
+                <p>Age: <small>26</small></p>
+                <p>Position: <small>HOOKER</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=306" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>LIAM WALSH</strong>
+                <p>Age: <small>25</small></p>
+                <p>Position: <small>FLANKER</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=307" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>SEAN RYAN</strong>
+                <p>Age: <small>22</small></p>
+                <p>Position: <small>FULLBACK</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=308" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>PAUL KELLY</strong>
+                <p>Age: <small>28</small></p>
+                <p>Position: <small>LOCK</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=309" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>MARK DOHERTY</strong>
+                <p>Age: <small>26</small></p>
+                <p>Position: <small>NUMBER 8</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=310" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>JOHN BRENNAN</strong>
+                <p>Age: <small>24</small></p>
+                <p>Position: <small>CENTRE</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=311" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>CHRIS BUTLER</strong>
+                <p>Age: <small>25</small></p>
+                <p>Position: <small>OPENSIDE</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=311" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>CHRIS BUTLER</strong>
+                <p>Age: <small>25</small></p>
+                <p>Position: <small>OPENSIDE</small></p>
+              </div>
+            </article>
+          </div>
+        </div>
+        
+        <div class="sponsorFooter">
+          <div class="sponsorFooter__brush"></div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+        </div>
+      </section>
+
+            <!-- 6) SQUAD -->
       <section class="spread spread--squad">
         <div class="page__inner">
           <header class="pageHeader">
@@ -1104,15 +1634,17 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=302" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>MIKE “SPEEDY” WILSON</strong>
-                <p>Position: <small>WING</small></p>
+                <strong>MIKE WILSON</strong>
+                <p>Age: <medium>24</small></p>
+                <p>Position: <medium>WING</medium></p>
               </div>
             </article>
 
             <article class="player">
               <img src="https://picsum.photos/600/400?random=303" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>ROB “TANK” ROBERTS</strong>
+                <strong>ROB ROBERTS</strong>
+                <p>Age: <small>27</small></p>
                 <p>Position: <small>PROP</small></p>
               </div>
             </article>
@@ -1120,7 +1652,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=304" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>ALEX “ACE” CARTER</strong>
+                <strong>ALEX CARTER</strong>
+                <p>Age: <small>27</small></p>
                 <p>Position: <small>SCRUM-HALF</small></p>
               </div>
             </article>
@@ -1128,7 +1661,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=305" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>DAVID "ROCK" MURPHY</strong>
+                <strong>DAVID MURPHY</strong>
+                <p>Age: <small>26</small></p>
                 <p>Position: <small>HOOKER</small></p>
               </div>
             </article>
@@ -1136,7 +1670,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=306" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>LIAM "LION" WALSH</strong>
+                <strong>LIAM WALSH</strong>
+                <p>Age: <small>25</small></p>
                 <p>Position: <small>FLANKER</small></p>
               </div>
             </article>
@@ -1144,7 +1679,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=307" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>SEAN "SWIFT" RYAN</strong>
+                <strong>SEAN RYAN</strong>
+                <p>Age: <small>22</small></p>
                 <p>Position: <small>FULLBACK</small></p>
               </div>
             </article>
@@ -1152,7 +1688,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=308" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>PAUL "POWER" KELLY</strong>
+                <strong>PAUL KELLY</strong>
+                <p>Age: <small>28</small></p>
                 <p>Position: <small>LOCK</small></p>
               </div>
             </article>
@@ -1160,7 +1697,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=309" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>MARK "MAGNET" DOHERTY</strong>
+                <strong>MARK DOHERTY</strong>
+                <p>Age: <small>26</small></p>
                 <p>Position: <small>NUMBER 8</small></p>
               </div>
             </article>
@@ -1168,7 +1706,8 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=310" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>JOHN "JACK" BRENNAN</strong>
+                <strong>JOHN BRENNAN</strong>
+                <p>Age: <small>24</small></p>
                 <p>Position: <small>CENTRE</small></p>
               </div>
             </article>
@@ -1176,7 +1715,17 @@
             <article class="player">
               <img src="https://picsum.photos/600/400?random=311" alt="Player headshot placeholder">
               <div class="player__label">
-                <strong>CHRIS "CHIEF" BUTLER</strong>
+                <strong>CHRIS BUTLER</strong>
+                <p>Age: <small>25</small></p>
+                <p>Position: <small>OPENSIDE</small></p>
+              </div>
+            </article>
+
+            <article class="player">
+              <img src="https://picsum.photos/600/400?random=311" alt="Player headshot placeholder">
+              <div class="player__label">
+                <strong>CHRIS BUTLER</strong>
+                <p>Age: <small>25</small></p>
                 <p>Position: <small>OPENSIDE</small></p>
               </div>
             </article>
@@ -1185,9 +1734,24 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
+      </section>
+
+            <!-- 10) BLANK SPONSOR PAGE -->
+      <section class="spread" style="display: flex; align-items: center; justify-content: center; background: #0B0F17;">
+        <div style="color: rgba(255,255,255,.5); font-size: 24px; font-weight: 700;">(sponsor page)</div>
+      </section>
+            <!-- 10) BLANK SPONSOR PAGE -->
+      <section class="spread" style="display: flex; align-items: center; justify-content: center; background: #0B0F17;">
+        <div style="color: rgba(255,255,255,.5); font-size: 24px; font-weight: 700;">(sponsor page)</div>
+      </section>
+            <!-- 10) BLANK SPONSOR PAGE -->
+      <section class="spread" style="display: flex; align-items: center; justify-content: center; background: #0B0F17;">
+        <div style="color: rgba(255,255,255,.5); font-size: 24px; font-weight: 700;">(sponsor page)</div>
       </section>
 
       <!-- 7) ITINERARY -->
@@ -1227,8 +1791,10 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
       </section>
 
@@ -1269,34 +1835,15 @@
         
         <div class="sponsorFooter">
           <div class="sponsorFooter__brush"></div>
-          <img src="./images/kearys-footer.png" alt="Kearys Car Store">
-          <img src="./images/kukri-footer.png" alt="Kukri">
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
+          <div class="sponsor-placeholder">(sponsor section)</div>
         </div>
       </section>
 
-      <!-- 9) SPONSOR — KEARYS -->
-      <section class="spread spread--sponsor">
-        <div class="sponsor__bg">
-          <img src="./images/kearys_sponsor.png" alt="Kearys Car Store sponsor">
-        </div>
-        <div class="band band--blue"></div>
-        <div class="band band--blue2"></div>
 
-        <div class="sponsor__content">
-          <span class="chip">OUR SPONSOR</span>
-          <h3 class="sponsorTitle">Kearys Car Store</h3>
-          <p class="sponsorCopy">
-            A huge thank you to Kearys Car Store for supporting Cork Con on tour.
-            Your backing helps make the trip possible and keeps the squad moving.
-          </p>
 
-          <div class="sponsorBadges">
-            <span class="badge">Proud Tour Sponsor</span>
-            <span class="badge">Support Local</span>
-            <span class="badge">Thank You Kearys</span>
-          </div>
-        </div>
-      </section>
 
     </div>
   </div>
